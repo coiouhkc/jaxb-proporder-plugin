@@ -11,13 +11,13 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 
 import javax.xml.bind.annotation.XmlType;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class PropOrderPlugin extends Plugin {
 
     public static final String OPTION_NAME = "XpropOrder";
+
+    private static final String OPTION_PREFIX = "-" + OPTION_NAME + ":";
 
     private Map<String, List<String>> propOrderMap = new HashMap<>();
 
@@ -25,6 +25,11 @@ public class PropOrderPlugin extends Plugin {
     public int parseArgument(Options opt, String[] args, int i) {
         String arg = args[i].trim();
         System.out.println(arg);
+        if (arg.startsWith(OPTION_PREFIX)) {
+            String[] classPropOrder = arg.substring(OPTION_PREFIX.length()).split(":");
+            propOrderMap.put(classPropOrder[0], new ArrayList<>(Arrays.asList(classPropOrder[1].split(","))));
+            return 1;
+        }
         return 0;
     }
 
